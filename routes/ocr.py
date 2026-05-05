@@ -3,9 +3,7 @@ from fastapi import APIRouter, UploadFile, File
 router = APIRouter()
 
 @router.post("/")
-async def ocr_cccd(file: UploadFile = File(...)):
-    # 1. Read image
+async def ocr(file: UploadFile):
     image = await file.read()
-
-
-    return True
+    #result = pipeline.run_pipeline(image)
+    #return result

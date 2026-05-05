@@ -26,7 +26,7 @@ Hệ thống có khả năng xử lý ảnh trong nhiều điều kiện khác n
      ```json
       {
         "Số": "079203001234",
-        "Họ và tên": "NGUYEN VAN A",
+        "Họ và tên": "NGUYỄN VĂN A",
         "Ngày sinh": "01/01/2000",
         "Giới tính": "Nam",
         "Quê quán": "Xã Tân Phú, Huyện Đồng Phú, Tỉnh Bình Phước",

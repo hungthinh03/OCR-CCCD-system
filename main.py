@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from routes.ocr import router as ocr_router
+import torch
 
 app = FastAPI(title="OCR API")
 

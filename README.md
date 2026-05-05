@@ -1,32 +1,30 @@
 # Hệ thống OCR CCCD / Passport
 
 ## 1. Tổng quan
-Dự án xây dựng một hệ thống OCR end-to-end nhằm trích xuất thông tin từ ảnh CCCD (Căn cước công dân) và Hộ chiếu.  
-Hệ thống có khả năng xử lý ảnh trong nhiều điều kiện khác nhau và trả về dữ liệu có cấu trúc dạng JSON.
+Dự án xây dựng một hệ thống OCR end-to-end nhằm trích xuất thông tin từ ảnh CCCD (Căn cước công dân) và hộ chiếu. Hệ thống có khả năng xử lý ảnh trong nhiều điều kiện khác nhau và trả về dữ liệu có cấu trúc dạng JSON.
 
 
 
 ## 2. Pipeline xử lý
-1. Input Image
-2. Tiền xử lý (resize, deskew)
-3. Nhận diện tài liệu
-4. Nhận diện vùng thông tin (bbox)
-5. OCR (trích xuất text)
-6. Hậu xử lý (format, validation)
-7. JSON Output
+1. Ảnh đầu vào  
+2. Tiền xử lý (resize, deskew)  
+3. Nhận diện tài liệu  
+4. Nhận diện vùng thông tin (bounding box)  
+5. OCR (trích xuất văn bản)  
+6. Hậu xử lý (chuẩn hóa, kiểm tra dữ liệu)  
+7. Xuất JSON  
 
 
 
 ## 3. API Endpoints
-   - **Tên API**: /ocr
-   - **Phương thức**: POST  
-   - **Request**: file ảnh
+   - **Endpoint**: `POST /ocr`
+   - **Request**: file image hoặc camera capture
    - **Response**:  
    
      ```json
       {
         "Số": "079203001234",
-        "Họ và tên": "NGUYEN VAN A",
+        "Họ và tên": "NGUYỄN VĂN A",
         "Ngày sinh": "01/01/2000",
         "Giới tính": "Nam",
         "Quê quán": "Xã Tân Phú, Huyện Đồng Phú, Tỉnh Bình Phước",

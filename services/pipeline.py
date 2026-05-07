@@ -2,8 +2,15 @@ from models.document.model import detect_document
 from models.field.model import detect_fields
 from models.ocr.engine import extract_text
 from services.postprocess import postprocess_result
+from services.preprocess import preprocess_image
 
-def run_pipeline(image):
+def run_pipeline(contents):
+    # Preprocess
+    image = preprocess_image(contents)
+
+    if image is None:
+        return {"error": "Invalid image"}
+
     # Detect document
     document_image = detect_document(image)
 

@@ -9,12 +9,6 @@ router = APIRouter()
 async def ocr(file: UploadFile = File(...)):
     contents = await file.read()
 
-    np_arr = np.frombuffer(contents, np.uint8)
-    image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-
-    if image is None:
-        return {"error": "Invalid image"}
-
-    result = pipeline.run_pipeline(image)
+    result = pipeline.run_pipeline(contents)
 
     return result

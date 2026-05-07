@@ -4,7 +4,6 @@
 Dự án xây dựng một hệ thống OCR end-to-end nhằm trích xuất thông tin từ ảnh CCCD (Căn cước công dân) và hộ chiếu. Hệ thống có khả năng xử lý ảnh trong nhiều điều kiện khác nhau và trả về dữ liệu có cấu trúc dạng JSON.
 
 
-
 ## 2. Pipeline xử lý
 1. Ảnh đầu vào  
 2. Tiền xử lý (resize, deskew)  
@@ -15,10 +14,9 @@ Dự án xây dựng một hệ thống OCR end-to-end nhằm trích xuất thô
 7. Xuất JSON  
 
 
-
 ## 3. API Endpoints
    - **Endpoint**: `POST /ocr`
-   - **Request**: file image hoặc camera capture
+   - **Request**: file image
    - **Response**:  
    
      ```json
@@ -34,18 +32,18 @@ Dự án xây dựng một hệ thống OCR end-to-end nhằm trích xuất thô
       }
       ```  
    
-## 4. Đánh giá
-- Độ chính xác OCR
-- Độ chính xác nhận diện vùng (mAP)
-- Thời gian xử lý mỗi ảnh
+
+## 4. Tiêu chí đánh giá
+- **OCR Accuracy**: Đánh giá độ chính xác nhận dạng văn bản từ CCCD/Hộ chiếu.  
+- **Detection mAP**: Đánh giá khả năng phát hiện đúng vùng thông tin.  
+- **Processing Time**: Đo thời gian xử lý trung bình cho mỗi ảnh.  
+- **Robustness**: Kiểm tra hiệu quả trên ảnh mờ, nghiêng và thiếu sáng.  
 
 
-
-## 5. Kết quả
-- Trích xuất thông tin có cấu trúc từ CCCD/Hộ chiếu
-- Độ chính xác > 80%
-- API hoạt động nhanh và ổn định
-
+## 5. Kết quả đạt được
+- Trích xuất dữ liệu có cấu trúc dưới dạng JSON.  
+- Độ chính xác OCR đạt trên 80% trên tập kiểm thử.  
+- API xử lý nhanh, ổn định.
 
 
 ## 6. Công nghệ sử dụng

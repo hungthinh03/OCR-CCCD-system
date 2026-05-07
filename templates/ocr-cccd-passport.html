@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OCR CCCD / Passport — Trích xuất thông tin tự động</title>
+  <meta name="description" content="Hệ thống nhận diện và trích xuất thông tin từ ảnh CCCD và hộ chiếu bằng OCR." />
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --fg: #1b2233;
+      --card: #fff;
+      --muted: #6b7385;
+      --muted-bg: #f1f3f8;
+      --border: #e3e7ef;
+      --primary: #3b6cf6;
+      --primary-glow: #6a8cff;
+      --primary-fg: #fff;
+      --success: #22a06b;
+      --destructive: #e0463a;
+      --radius: 12px;
+      --shadow: 0 10px 30px -10px rgba(59, 108, 246, .25);
+      --gradient: linear-gradient(135deg, #3b6cf6, #7d6cff);
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+
+    a {
+      color: inherit
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255, 255, 255, .75);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border)
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      max-width: 1100px;
+      margin: 0 auto
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--gradient);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      box-shadow: 0 0 30px rgba(106, 140, 255, .45)
+    }
+
+    .brand h1 {
+      font-size: 15px;
+      margin: 0
+    }
+
+    .brand p {
+      font-size: 12px;
+      margin: 0;
+      color: var(--muted)
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--muted-bg);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500
+    }
+
+    .hero {
+      padding: 40px 0 16px
+    }
+
+    .hero h2 {
+      font-size: 32px;
+      margin: 0 0 8px;
+      letter-spacing: -.02em
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 640px;
+      margin: 0
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      padding: 24px 24px 64px;
+      max-width: 1100px;
+      margin: 0 auto
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px
+    }
+
+    .card.elev {
+      box-shadow: var(--shadow);
+      background: linear-gradient(180deg, #fff, #fafbff)
+    }
+
+    .full {
+      grid-column: 1/-1
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--muted-bg);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 16px
+    }
+
+    .tab {
+      padding: 8px;
+      text-align: center;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted)
+    }
+
+    .tab.active {
+      background: #fff;
+      color: var(--fg);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .06)
+    }
+
+    .drop {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: .15s
+    }
+
+    .drop:hover {
+      border-color: var(--primary);
+      background: #f5f8ff
+    }
+
+    .drop.drag {
+      border-color: var(--primary);
+      background: #eef3ff
+    }
+
+    .drop .ic {
+      width: 56px;
+      height: 56px;
+      border-radius: 999px;
+      background: #eaf0ff;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 12px;
+      color: var(--primary);
+      font-size: 24px
+    }
+
+    .drop p {
+      margin: 4px 0
+    }
+
+    .drop small {
+      color: var(--muted)
+    }
+
+    .drop img {
+      max-height: 240px;
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .08)
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px
+    }
+
+    .btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
+      transition: .15s
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff
+    }
+
+    .btn-primary:hover {
+      background: #2f5be0
+    }
+
+    .btn-primary:disabled {
+      opacity: .5;
+      cursor: not-allowed
+    }
+
+    .btn-outline {
+      background: #fff;
+      border-color: var(--border);
+      color: var(--fg);
+      flex: 0 0 auto
+    }
+
+    .btn-outline:hover {
+      background: var(--muted-bg)
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 12px
+    }
+
+    .results-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px
+    }
+
+    .results-head h3 {
+      margin: 0;
+      font-size: 15px
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 56px 0
+    }
+
+    .empty .ic {
+      font-size: 36px;
+      opacity: .4;
+      margin-bottom: 8px
+    }
+
+    .field {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      background: #fff
+    }
+
+    .field .lbl {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--muted)
+    }
+
+    .field .val {
+      font-weight: 500;
+      margin-top: 2px;
+      word-break: break-word
+    }
+
+    .field .note {
+      color: var(--destructive);
+      font-size: 12px;
+      margin-top: 2px
+    }
+
+    .ok {
+      color: var(--success)
+    }
+
+    .err {
+      color: var(--destructive)
+    }
+
+    pre {
+      background: #f3f5fa;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      font-size: 13px;
+      overflow: auto;
+      max-height: 380px;
+      margin: 0;
+      position: relative
+    }
+
+    .json-wrap {
+      position: relative
+    }
+
+    .json-wrap .copy {
+      position: absolute;
+      top: 8px;
+      right: 8px
+    }
+
+    .sub-tabs {
+      display: inline-flex;
+      background: var(--muted-bg);
+      border-radius: 8px;
+      padding: 3px;
+      margin-bottom: 12px
+    }
+
+    .sub-tab {
+      padding: 6px 14px;
+      font-size: 13px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--muted);
+      font-weight: 500
+    }
+
+    .sub-tab.active {
+      background: #fff;
+      color: var(--fg)
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px
+    }
+
+    .step {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      background: #fff;
+      transition: .15s
+    }
+
+    .step:hover {
+      border-color: rgba(59, 108, 246, .4)
+    }
+
+    .step .t {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 0 0 4px
+    }
+
+    .step .d {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(59, 108, 246, .25);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      display: inline-block;
+      vertical-align: middle
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 20px;
+      color: var(--muted);
+      font-size: 12px
+    }
+
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #1b2233;
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .2);
+      z-index: 100;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: .2s;
+      pointer-events: none
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    .toast.success {
+      background: var(--success)
+    }
+
+    .toast.error {
+      background: var(--destructive)
+    }
+
+    .is-hidden {
+      display: none !important
+    }
+
+    .loading-copy {
+      margin-top: 12px
+    }
+
+    .pipeline-title {
+      margin: 0 0 14px;
+      font-size: 15px
+    }
+
+    @media (max-width:760px) {
+      main {
+        grid-template-columns: 1fr
+      }
+
+      .pipeline {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .hero h2 {
+        font-size: 26px
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="logo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+            <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+            <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+            <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+            <path d="M7 12h10" />
+          </svg>
+        </div>
+        <div>
+          <h1>OCR CCCD / Passport</h1>
+          <p>Trích xuất thông tin tự động</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="container hero">
+    <h2>Tải ảnh giấy tờ — nhận kết quả trong vài giây</h2>
+  </section>
+
+  <main>
+    <!-- Upload -->
+    <div class="card elev">
+      <div class="tabs" id="docTabs">
+        <div class="tab active" data-doc="cccd">CCCD</div>
+        <div class="tab" data-doc="passport">Passport</div>
+      </div>
+
+      <div class="drop" id="drop">
+        <input type="file" id="fileInput" accept="image/*" hidden />
+        <div id="dropEmpty">
+          <div class="ic">⬆</div>
+          <p><strong>Kéo & thả ảnh vào đây</strong></p>
+          <small>hoặc bấm để chọn tệp · JPG, PNG (≤ 10MB)</small>
+        </div>
+        <div id="dropPreview" class="is-hidden">
+          <img id="previewImg" alt="preview" />
+          <p><small id="fileName"></small></p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="runBtn" disabled>
+          <span id="runLabel">📄 Trích xuất thông tin</span>
+        </button>
+        <button class="btn btn-outline" id="resetBtn" disabled>↻ Làm mới</button>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="card">
+      <div class="results-head">
+        <h3>Kết quả trích xuất</h3>
+        <span class="badge is-hidden" id="elapsed"></span>
+      </div>
+
+      <div id="emptyState" class="empty">
+        <div class="ic">🗎</div>
+        <p>Chưa có dữ liệu. Hãy tải ảnh và bấm "Trích xuất".</p>
+      </div>
+
+      <div id="loadingState" class="empty is-hidden">
+        <div class="spinner"></div>
+        <p class="loading-copy">Đang phân tích tài liệu…</p>
+      </div>
+
+      <div id="resultState" style="display:none">
+        <div class="sub-tabs" id="viewTabs">
+          <div class="sub-tab active" data-view="fields">Trường dữ liệu</div>
+          <div class="sub-tab" data-view="json">JSON</div>
+        </div>
+        <div id="fieldsView"></div>
+        <div id="jsonView" class="json-wrap is-hidden">
+          <button class="btn btn-outline btn-sm copy" id="copyBtn">⧉ Copy</button>
+          <pre id="jsonOut"></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pipeline -->
+    <div class="card full">
+      <h3 class="pipeline-title">Quy trình xử lý</h3>
+      <div class="pipeline">
+        <div class="step">
+          <p class="t">1. Upload</p>
+          <p class="d">Tải ảnh CCCD / Passport</p>
+        </div>
+        <div class="step">
+          <p class="t">2. Detection</p>
+          <p class="d">Phát hiện tài liệu & vùng thông tin</p>
+        </div>
+        <div class="step">
+          <p class="t">3. OCR</p>
+          <p class="d">Nhận dạng ký tự từng trường</p>
+        </div>
+        <div class="step">
+          <p class="t">4. Post-process</p>
+          <p class="d">Chuẩn hóa & validate dữ liệu</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>OCR CCCD/Passport · Demo UI · 2026</footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const MOCK = {
+      cccd: [
+        { key: "id", label: "Số CCCD", value: "", validator: v => /^\d{12}$/.test(v) },
+        { key: "name", label: "Họ và tên", value: "" },
+        { key: "dob", label: "Ngày sinh", value: "", validator: v => /^\d{2}\/\d{2}\/\d{4}$/.test(v) },
+        { key: "sex", label: "Giới tính", value: "" },
+        { key: "nationality", label: "Quốc tịch", value: "" },
+        { key: "origin", label: "Quê quán", value: "" },
+        { key: "address", label: "Nơi thường trú", value: "" },
+        { key: "expiry", label: "Có giá trị đến", value: "", validator: v => /^\d{2}\/\d{2}\/\d{4}$/.test(v) },
+      ],
+      passport: [
+        { key: "passportNo", label: "Số hộ chiếu", value: "", validator: v => /^[A-Z]\d{7,8}$/.test(v) },
+        { key: "name", label: "Họ và tên", value: "" },
+        { key: "dob", label: "Ngày sinh", value: "", validator: v => /^\d{2}\/\d{2}\/\d{4}$/.test(v) },
+        { key: "sex", label: "Giới tính", value: "" },
+        { key: "nationality", label: "Quốc tịch", value: "" },
+        { key: "issueDate", label: "Ngày cấp", value: "", validator: v => /^\d{2}\/\d{2}\/\d{4}$/.test(v) },
+        { key: "expiry", label: "Ngày hết hạn", value: "", validator: v => /^\d{2}\/\d{2}\/\d{4}$/.test(v) },
+        { key: "issuingAuthority", label: "Nơi cấp", value: "" },
+      ]
+    };
+
+    let state = { docType: "cccd", file: null, fields: [] };
+
+    const $ = id => document.getElementById(id);
+    const drop = $("drop"), input = $("fileInput");
+    const docTabs = document.querySelectorAll("#docTabs .tab");
+    const viewTabs = document.querySelectorAll("#viewTabs .sub-tab");
+    const emptyState = $("emptyState");
+    const loadingState = $("loadingState");
+    const resultState = $("resultState");
+    const elapsed = $("elapsed");
+
+    function setHidden(el, hidden) {
+      el.classList.toggle("is-hidden", hidden);
+    }
+
+    function setUploadState(hasFile) {
+      setHidden($("dropEmpty"), hasFile);
+      setHidden($("dropPreview"), !hasFile);
+      $("runBtn").disabled = !hasFile;
+      $("resetBtn").disabled = !hasFile;
+    }
+
+    function showEmpty() {
+      setHidden(emptyState, false);
+      setHidden(loadingState, true);
+      setHidden(resultState, true);
+      setHidden(elapsed, true);
+    }
+
+    function setView(view) {
+      setHidden($("fieldsView"), view !== "fields");
+      setHidden($("jsonView"), view !== "json");
+      viewTabs.forEach(tab => tab.classList.toggle("active", tab.dataset.view === view));
+    }
+
+    function setDocType(docType) {
+      state.docType = docType;
+      docTabs.forEach(tab => tab.classList.toggle("active", tab.dataset.doc === docType));
+    }
+
+    function toast(msg, type = "") {
+      const t = $("toast");
+      t.textContent = msg;
+      t.className = "toast show " + type;
+      clearTimeout(window._tt);
+      window._tt = setTimeout(() => t.className = "toast", 2200);
+    }
+
+    docTabs.forEach(tab => {
+      tab.onclick = () => setDocType(tab.dataset.doc);
+    });
+
+    viewTabs.forEach(tab => {
+      tab.onclick = () => setView(tab.dataset.view);
+    });
+
+    drop.onclick = () => input.click();
+    drop.ondragover = e => { e.preventDefault(); drop.classList.add("drag"); };
+    drop.ondragleave = () => drop.classList.remove("drag");
+    drop.ondrop = e => {
+      e.preventDefault(); drop.classList.remove("drag");
+      if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+    };
+    input.onchange = e => e.target.files[0] && handleFile(e.target.files[0]);
+
+    function handleFile(f) {
+      if (!f.type.startsWith("image/")) return toast("Vui lòng chọn tệp ảnh.", "error");
+      state.file = f;
+      $("previewImg").src = URL.createObjectURL(f);
+      $("fileName").textContent = f.name;
+      setUploadState(true);
+      showEmpty();
+    }
+
+    $("resetBtn").onclick = () => {
+      state.file = null; state.fields = [];
+      input.value = "";
+      setUploadState(false);
+      showEmpty();
+    };
+
+    $("runBtn").onclick = async () => {
+    };
+
+    showEmpty();
+    setUploadState(false);
+    setView("fields");
+
+  </script>
+</body>
+
+</html>

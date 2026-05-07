@@ -27,6 +27,7 @@ Dự án xây dựng một hệ thống OCR end-to-end nhằm trích xuất thô
         "Họ và tên": "NGUYỄN VĂN A",
         "Ngày sinh": "01/01/2000",
         "Giới tính": "Nam",
+        "Quốc tịch": "Việt Nam",
         "Quê quán": "Xã Tân Phú, Huyện Đồng Phú, Tỉnh Bình Phước",
         "Nơi thường trú": "Phường Phú Lợi, TP. Thủ Dầu Một, Tỉnh Bình Dương",
         "Có giá trị đến": "01/01/2035"

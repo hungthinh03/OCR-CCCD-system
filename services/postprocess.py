@@ -9,6 +9,19 @@ FIELD_MAPPING = {
     "expiry": "Có giá trị đến"
 }
 
+FIELD_MAPPING_PASSPORT = {
+    "passport_id": "Số hộ chiếu",
+    "name": "Họ và tên",
+    "nationality": "Quốc tịch",
+    "dob": "Ngày sinh",
+    "birth_place": "Nơi sinh",
+    "gender": "Giới tính",
+    "id_card": "Số GCMND",
+    "issue_date": "Ngày cấp",
+    "expiry": "Có giá trị đến",
+    "issue_place": "Nơi cấp"
+}
+
 
 def postprocess_result(raw_result):
     final_result = {}

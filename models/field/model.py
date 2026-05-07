@@ -14,6 +14,19 @@ CLASSES = [
     "expiry"
 ]
 
+CLASSES_PASSPORT = [
+    "passport_id",
+    "name",
+    "nationality",
+    "dob",
+    "birth_place",
+    "gender",
+    "id_card",
+    "issue_date",
+    "expiry",
+    "issue_place"
+]
+
 def detect_fields(image):
     results = model(image)
 

@@ -1,0 +1,41 @@
+{
+  "info": {
+    "_postman_id": "19b62bd7-8c44-409f-a05a-d9acd38f7a3b",
+    "name": "OCR CCCD",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "47522368",
+    "_collection_link": "https://go.postman.co/collection/47522368-19b62bd7-8c44-409f-a05a-d9acd38f7a3b?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Run pipeline",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "uuid": "bed3093f-5369-425b-b09d-2907e9b729d4",
+              "value": null
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8000/ocr",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "ocr"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

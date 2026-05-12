@@ -4,7 +4,7 @@ import torch
 
 app = FastAPI(title="OCR API")
 
-app.include_router(ocr_router, prefix="/ocr", tags=["OCR"])
+app.include_router(ocr_router, tags=["OCR"])
 
 @app.get("/")
 def root():

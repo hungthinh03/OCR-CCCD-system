@@ -26,14 +26,14 @@ FIELD_MAPPING_PASSPORT = {
 def postprocess_result(raw_result):
     final_result = {}
 
-    for key, value in raw_result.items():
+    for eng_key, vn_key in FIELD_MAPPING.items():
 
-        # Remove extra spaces
+        # Get value if exists, else ""
+        value = raw_result.get(eng_key, "")
+
+        # Clean text
         value = value.strip()
 
-        # Convert field name
-        vietnamese_key = FIELD_MAPPING.get(key, key)
-
-        final_result[vietnamese_key] = value
+        final_result[vn_key] = value
 
     return final_result

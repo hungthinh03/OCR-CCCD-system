@@ -1,7 +1,7 @@
-# Hệ thống OCR CCCD / Passport
+# Hệ thống OCR CCCD
 
 ## 1. Tổng quan
-Dự án xây dựng một hệ thống OCR end-to-end nhằm trích xuất thông tin từ ảnh CCCD (Căn cước công dân) và hộ chiếu. Hệ thống có khả năng xử lý ảnh trong nhiều điều kiện khác nhau và trả về dữ liệu có cấu trúc dạng JSON.
+Dự án xây dựng một hệ thống OCR end-to-end nhằm trích xuất thông tin từ ảnh CCCD (Căn cước công dân). Hệ thống có khả năng xử lý ảnh trong nhiều điều kiện khác nhau và trả về dữ liệu có cấu trúc dạng JSON.
 
 
 ## 2. Pipeline xử lý
@@ -34,7 +34,7 @@ Dự án xây dựng một hệ thống OCR end-to-end nhằm trích xuất thô
    
 
 ## 4. Tiêu chí đánh giá
-- **OCR Accuracy**: Đánh giá độ chính xác nhận dạng văn bản từ CCCD/Hộ chiếu.  
+- **OCR Accuracy**: Đánh giá độ chính xác nhận dạng văn bản từ CCCD.  
 - **Detection mAP**: Đánh giá khả năng phát hiện đúng vùng thông tin.  
 - **Processing Time**: Đo thời gian xử lý trung bình cho mỗi ảnh.  
 - **Robustness**: Kiểm tra hiệu quả trên ảnh mờ, nghiêng và thiếu sáng.  

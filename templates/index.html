@@ -39,11 +39,6 @@
   <main>
     <!-- Upload -->
     <div class="card elev">
-      <div class="tabs" id="docTabs">
-        <div class="tab active" data-doc="cccd">CCCD</div>
-        <div class="tab" data-doc="passport">Passport</div>
-      </div>
-
       <div class="drop" id="drop">
         <input type="file" id="fileInput" accept="image/*" hidden />
         <div id="dropEmpty">
@@ -82,7 +77,7 @@
         <p class="loading-copy">Đang phân tích tài liệu…</p>
       </div>
 
-      <div id="resultState" style="display:none">
+      <div id="resultState" class="is-hidden">
         <div class="sub-tabs" id="viewTabs">
           <div class="sub-tab active" data-view="fields">Trường dữ liệu</div>
           <div class="sub-tab" data-view="json">JSON</div>
@@ -123,119 +118,7 @@
 
   <div class="toast" id="toast"></div>
 
-  <script>
-    const MOCK = {
-      cccd: [
-        { key: "id", label: "Số CCCD", value: "", validator: v => /^\d{12}$/.test(v) },
-        { key: "name", label: "Họ và tên", value: "" },
-        { key: "dob", label: "Ngày sinh", value: "", validator: v => /^\d{2}\/\d{2}\/\d{4}$/.test(v) },
-        { key: "sex", label: "Giới tính", value: "" },
-        { key: "nationality", label: "Quốc tịch", value: "" },
-        { key: "origin", label: "Quê quán", value: "" },
-        { key: "address", label: "Nơi thường trú", value: "" },
-        { key: "expiry", label: "Có giá trị đến", value: "", validator: v => /^\d{2}\/\d{2}\/\d{4}$/.test(v) },
-      ],
-      passport: [
-        { key: "passportNo", label: "Số hộ chiếu", value: "", validator: v => /^[A-Z]\d{7,8}$/.test(v) },
-        { key: "name", label: "Họ và tên", value: "" },
-        { key: "dob", label: "Ngày sinh", value: "", validator: v => /^\d{2}\/\d{2}\/\d{4}$/.test(v) },
-        { key: "sex", label: "Giới tính", value: "" },
-        { key: "nationality", label: "Quốc tịch", value: "" },
-        { key: "issueDate", label: "Ngày cấp", value: "", validator: v => /^\d{2}\/\d{2}\/\d{4}$/.test(v) },
-        { key: "expiry", label: "Ngày hết hạn", value: "", validator: v => /^\d{2}\/\d{2}\/\d{4}$/.test(v) },
-        { key: "issuingAuthority", label: "Nơi cấp", value: "" },
-      ]
-    };
-
-    let state = { docType: "cccd", file: null, fields: [] };
-
-    const $ = id => document.getElementById(id);
-    const drop = $("drop"), input = $("fileInput");
-    const docTabs = document.querySelectorAll("#docTabs .tab");
-    const viewTabs = document.querySelectorAll("#viewTabs .sub-tab");
-    const emptyState = $("emptyState");
-    const loadingState = $("loadingState");
-    const resultState = $("resultState");
-    const elapsed = $("elapsed");
-
-    function setHidden(el, hidden) {
-      el.classList.toggle("is-hidden", hidden);
-    }
-
-    function setUploadState(hasFile) {
-      setHidden($("dropEmpty"), hasFile);
-      setHidden($("dropPreview"), !hasFile);
-      $("runBtn").disabled = !hasFile;
-      $("resetBtn").disabled = !hasFile;
-    }
-
-    function showEmpty() {
-      setHidden(emptyState, false);
-      setHidden(loadingState, true);
-      setHidden(resultState, true);
-      setHidden(elapsed, true);
-    }
-
-    function setView(view) {
-      setHidden($("fieldsView"), view !== "fields");
-      setHidden($("jsonView"), view !== "json");
-      viewTabs.forEach(tab => tab.classList.toggle("active", tab.dataset.view === view));
-    }
-
-    function setDocType(docType) {
-      state.docType = docType;
-      docTabs.forEach(tab => tab.classList.toggle("active", tab.dataset.doc === docType));
-    }
-
-    function toast(msg, type = "") {
-      const t = $("toast");
-      t.textContent = msg;
-      t.className = "toast show " + type;
-      clearTimeout(window._tt);
-      window._tt = setTimeout(() => t.className = "toast", 2200);
-    }
-
-    docTabs.forEach(tab => {
-      tab.onclick = () => setDocType(tab.dataset.doc);
-    });
-
-    viewTabs.forEach(tab => {
-      tab.onclick = () => setView(tab.dataset.view);
-    });
-
-    drop.onclick = () => input.click();
-    drop.ondragover = e => { e.preventDefault(); drop.classList.add("drag"); };
-    drop.ondragleave = () => drop.classList.remove("drag");
-    drop.ondrop = e => {
-      e.preventDefault(); drop.classList.remove("drag");
-      if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
-    };
-    input.onchange = e => e.target.files[0] && handleFile(e.target.files[0]);
-
-    function handleFile(f) {
-      if (!f.type.startsWith("image/")) return toast("Vui lòng chọn tệp ảnh.", "error");
-      state.file = f;
-      $("previewImg").src = URL.createObjectURL(f);
-      $("fileName").textContent = f.name;
-      setUploadState(true);
-      showEmpty();
-    }
-
-    $("resetBtn").onclick = () => {
-      state.file = null; state.fields = [];
-      input.value = "";
-      setUploadState(false);
-      showEmpty();
-    };
-
-    $("runBtn").onclick = async () => {
-    };
-
-    showEmpty();
-    setUploadState(false);
-    setView("fields");
-
-  </script>
+  <script src="script.js"></script>
 </body>
 
 </html>

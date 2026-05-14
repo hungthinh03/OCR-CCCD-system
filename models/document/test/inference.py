@@ -1,15 +1,15 @@
 import cv2
-from ultralytics import YOLO
+from pathlib import Path
+import sys
 
-model = YOLO("models/document/best.pt")
+sys.path.append(str(Path(__file__).resolve().parents[3]))
+from models.document.model import detect_document
 
-results = model("models/document/test/test.jpg")
-
+# Read image
 img = cv2.imread("models/document/test/test.jpg")
 
-for box in results[0].boxes.xyxy:
-    x1, y1, x2, y2 = map(int, box)
-    cv2.rectangle(img, (x1,y1), (x2,y2), (0,255,0), 10)
+# Document detection
+cropped = detect_document(img)
 
-cv2.imwrite("models/document/test/output.jpg", img)
-
+# Save result
+cv2.imwrite("models/document/test/output.jpg", cropped)

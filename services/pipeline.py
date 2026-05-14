@@ -20,16 +20,24 @@ def run_pipeline(contents):
     # OCR each field
     raw_result = {}
 
-    for field_name, bbox in field_bboxes.items():
-        x1, y1, x2, y2 = bbox
+    for field_name, bboxes in field_bboxes.items():
+        # Sort top-to-bottom
+        bboxes.sort(key=lambda b: b[1])
 
-        # Crop field image
-        crop = document_image[y1:y2, x1:x2]
+        texts = []
 
-        # OCR prediction
-        text = extract_text(crop)
+        for bbox in bboxes:
+            x1, y1, x2, y2 = bbox
 
-        raw_result[field_name] = text
+            # Crop field image
+            crop = document_image[y1:y2, x1:x2]
+
+            # OCR prediction
+            text = extract_text(crop)
+            texts.append(text)
+
+        # Merge multiline text
+        raw_result[field_name] = " ".join(texts)
 
     # Post-process result
     final_result = postprocess_result(raw_result)

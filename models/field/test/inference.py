@@ -2,18 +2,7 @@ import cv2
 from ultralytics import YOLO
 
 # Load model
-model = YOLO("models/field/best.pt")
-
-CLASSES = [
-    "id",
-    "name",
-    "dob",
-    "gender",
-    "nationality",
-    "hometown",
-    "address",
-    "expiry"
-]
+model = YOLO("models/field/text_detect.pt")
 
 # Predict
 results = model("models/field/test/test.jpg")
@@ -29,7 +18,7 @@ classes = results[0].boxes.cls.cpu().numpy()
 for box, cls_id in zip(boxes, classes):
     x1, y1, x2, y2 = map(int, box)
 
-    field_name = CLASSES[int(cls_id)]
+    field_name = model.names[int(cls_id)]
 
     # Draw rectangle
     cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 3)

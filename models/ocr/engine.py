@@ -1,13 +1,11 @@
-import numpy as np
 import cv2
 from vietocr.tool.predictor import Predictor
 from vietocr.tool.config import Cfg
-import torch
 from PIL import Image
 
 # Load model (1 lần)
 config = Cfg.load_config_from_name('vgg_transformer')
-config['device'] = 'cuda' if torch.cuda.is_available() else 'cpu'
+config['device'] = 'cpu'
 
 ocr_model = Predictor(config)
 

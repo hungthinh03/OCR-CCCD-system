@@ -1,4 +1,5 @@
 from ultralytics import YOLO
+
 model = YOLO('models/field/text_detect.pt')
 
 def detect_fields(image):

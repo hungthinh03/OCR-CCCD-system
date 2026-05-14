@@ -46,8 +46,46 @@ Dự án xây dựng một hệ thống OCR end-to-end nhằm trích xuất thô
 - API xử lý nhanh, ổn định.
 
 
-## 6. Công nghệ sử dụng
-- **FastAPI:** Backend API
-- **OpenCV:** Xử lý ảnh
-- **YOLO:** Nhận diện đối tượng
-- **PaddleOCR / VietOCR:** Nhận dạng văn bản
+## 6. Chạy và kiểm thử API
+### 1. Cài đặt
+Tạo môi trường ảo (khuyến nghị):
+
+```bash
+python -m venv venv
+```
+
+Kích hoạt môi trường:
+```bash
+venv\Scripts\activate
+```
+
+Cài đặt dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+
+### 2. Chạy server API
+Khởi động server bằng Uvicorn:
+
+```bash
+uvicorn main:app --reload
+```
+
+> API sẽ chạy tại: http://127.0.0.1:8000
+
+
+### 3. Kiểm thử API
+Sử dụng file collection Postman có sẵn: [OCR-CCCD.postman_collection.json](./postman/OCR-CCCD.postman_collection.json)
+
+
+## 7. Tổng quan giao diện
+<img src="assets/screen.png" style="width:75%;"/>
+
+
+## 8. Công nghệ sử dụng
+- **FastAPI:** Hệ thống backend API hiệu năng cao, hỗ trợ xử lý bất đồng bộ và dễ dàng mở rộng.
+- **OpenCV:** Xử lý ảnh đầu vào, bao gồm tiền xử lý, cắt vùng và biến đổi hình ảnh.
+- **YOLO:** Mô hình phát hiện đối tượng, dùng để định vị các vùng thông tin trên ảnh CCCD.
+- **PaddleOCR / VietOCR:** Hệ thống nhận dạng ký tự quang học, trích xuất văn bản từ các vùng thông tin.

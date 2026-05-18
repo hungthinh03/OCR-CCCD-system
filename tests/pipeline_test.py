@@ -35,17 +35,18 @@ debug_img = document_image.copy()
 # OCR
 raw_result = {}
 
-for field_name, bbox in field_bboxes.items():
+for field_name, bboxes in field_bboxes.items():
+    for bbox in bboxes:
 
-    x1, y1, x2, y2 = bbox
+        x1, y1, x2, y2 = bbox
 
-    print(f"\n===== {field_name} =====")
-    print(f"BBOX: {bbox}")
+        print(f"\n===== {field_name} =====")
+        print(f"BBOX: {bbox}")
 
     # Draw bbox
-    cv2.rectangle(debug_img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        cv2.rectangle(debug_img, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
-    cv2.putText(
+        cv2.putText(
         debug_img,
         field_name,
         (x1, y1 - 10),
@@ -56,16 +57,16 @@ for field_name, bbox in field_bboxes.items():
     )
 
     # Crop field
-    crop = document_image[y1:y2, x1:x2]
+        crop = document_image[y1:y2, x1:x2]
 
     # Save crop
-    cv2.imwrite(f"tests/field_outputs/output_{field_name}.jpg", crop)
+        cv2.imwrite(f"tests/field_outputs/output_{field_name}.jpg", crop)
 
     # OCR
-    text = extract_text(crop)
-    print("OCR:", repr(text))
+        text = extract_text(crop)
+        print("OCR:", repr(text))
 
-    raw_result[field_name] = text
+        raw_result[field_name] = text
 
 
 # Save

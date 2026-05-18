@@ -70,7 +70,7 @@ pip install -r requirements.txt
 Khởi động server bằng Uvicorn:
 
 ```bash
-uvicorn main:app --reload
+python -m uvicorn main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
 > API sẽ chạy tại: http://127.0.0.1:8000
@@ -89,3 +89,4 @@ Sử dụng file collection Postman có sẵn: [OCR-CCCD.postman_collection.json
 - **OpenCV:** Xử lý ảnh đầu vào, bao gồm tiền xử lý, cắt vùng và biến đổi hình ảnh.
 - **YOLO:** Mô hình phát hiện đối tượng, dùng để định vị các vùng thông tin trên ảnh CCCD.
 - **PaddleOCR / VietOCR:** Hệ thống nhận dạng ký tự quang học, trích xuất văn bản từ các vùng thông tin.
+

@@ -81,19 +81,28 @@ function toast(msg, type = "") {
 
 function renderFields(data) {
   const fields = Object.keys(data).map(key => {
-    let val = data[key] || "";
-    // Basic valid check: non-empty
-    let valid = val.length > 0;
+    // data[key] bây giờ là một object: { value: "...", is_valid: true/false }
+    const fieldData = data[key];
+    const val = fieldData.value || "";
+    const isValid = fieldData.is_valid;
+    
     return `
-      <div class="field" style="display:flex; flex-direction:column; justify-content:flex-start; text-align:left;">
-        <label class="lbl">${key}</label>
-        <div class="val" style="display:flex; justify-content:space-between; width:100%; align-items:center; font-size:15px">
-          <span>${val ? val : '<em style="color:#aaa;font-weight:normal;">Trống</em>'}</span>
-          <span class="status ${valid ? 'ok' : 'err'}" style="font-size:16px;">${valid ? '✓' : '⚠'}</span>
+      <div class="field" style="display:flex; flex-direction:column; justify-content:flex-start; text-align:left; margin-bottom: 12px;">
+        <label class="lbl" style="font-weight: bold; color: #555;">${key}</label>
+        <div class="val" style="display:flex; justify-content:space-between; width:100%; align-items:center; font-size:15px; padding: 4px 0; border-bottom: 1px solid #eee;">
+          <span style="color: ${val ? '#333' : '#aaa'}">
+            ${val ? val : '<em style="font-weight:normal;">Trống</em>'}
+          </span>
+          <span class="status ${isValid ? 'ok' : 'err'}" 
+                style="font-size:16px; color: ${isValid ? '#28a745' : '#dc3545'};"
+                title="${isValid ? 'Dữ liệu hợp lệ' : 'Dữ liệu có thể sai định dạng'}">
+            ${isValid ? '✓' : '⚠'}
+          </span>
         </div>
       </div>
     `;
   }).join('');
+  
   $("fieldsView").innerHTML = fields;
   $("jsonOut").textContent = JSON.stringify(data, null, 2);
 }
